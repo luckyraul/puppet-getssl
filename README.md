@@ -1,2 +1,2 @@
 # puppet-getssl
-puppet module for getssl 
+puppet module for getssl
