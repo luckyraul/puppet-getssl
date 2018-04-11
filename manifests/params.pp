@@ -8,6 +8,9 @@ class getssl::params {
   $config_path = '/etc/getssl'
   $script_source = 'https://raw.githubusercontent.com/srvrco/getssl/master/getssl'
 
+  $ca = 'https://acme-v01.api.letsencrypt.org'
+  $reload_cmd = 'systemctl reload nginx'
+
   case $::operatingsystem {
       'Debian': {
           case $::lsbdistcodename {

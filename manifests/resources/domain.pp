@@ -1,13 +1,48 @@
 # define: getssl::resources::domain
 define getssl::resources::domain (
-  String $domain  = $name,
-  String $confdir = $getssl::config_path,
-  )
-{
+  String $acl,
+  String $domain               = $name,
+  String $confdir              = $getssl::config_path,
+  String $ca                   = $getssl::params::ca,
+  String $ssl_cert             = "/etc/ssl/${name}.crt",
+  String $ssl_key              = "/etc/ssl/${name}.key",
+  String $ca_cert              = "/etc/ssl/${name}.chain.crt",
+  Optional[Array] $additional  = [],
+  Optional[String] $reload_cmd = $getssl::params::reload_cmd,
+  ) {
+
   file { "${confdir}/${domain}":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0644',
+  } -> file { "${confdir}/${domain}/getssl.cfg":
+    ensure  => 'present',
+    replace => 'no',
+    mode    => '0644',
+    owner   => root,
+    group   => root,
   }
+
+  $defaults = {
+    path              => "${confdir}/${domain}/getssl.cfg",
+    key_val_separator => '=',
+    require           => File["${confdir}/${domain}/getssl.cfg"],
+  }
+
+  $sans = empty($additional) ? { true => ["www.${domain}"], default => $additional }
+
+  $params = { ''             => {
+      'CA'                   => $ca,
+      'SANS'                 => join($sans, ','),
+      'ACL'                  => "('${acl}')",
+      'USE_SINGLE_ACL'       => true,
+      'DOMAIN_CERT_LOCATION' => $ssl_cert,
+      'DOMAIN_KEY_LOCATION'  => $ssl_key,
+      'CA_CERT_LOCATION'     => $ca_cert,
+      'RELOAD_CMD'           => "\"${reload_cmd}\"",
+    }
+  }
+
+  create_ini_settings($params, $defaults)
 }
