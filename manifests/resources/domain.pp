@@ -30,7 +30,7 @@ define getssl::resources::domain (
     require           => File["${confdir}/${domain}/getssl.cfg"],
   }
 
-  $sans = empty($additional) ? { true => ["www.${domain}"], default => $additional }
+  $sans = empty($additional) ? { true => [], default => $additional }
 
   $params = { ''             => {
       'CA'                   => $ca,
