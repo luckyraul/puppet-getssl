@@ -6,7 +6,8 @@ define getssl::resources::domain (
   String $ca                   = $getssl::params::ca,
   String $ssl_cert             = "/etc/ssl/${name}.crt",
   String $ssl_key              = "/etc/ssl/${name}.key",
-  String $ca_cert              = "/etc/ssl/${name}.chain.crt",
+  String $ssl_chain            = "/etc/ssl/${name}.chain.crt",
+  String $ca_cert              = "/etc/ssl/${name}.ca.crt",
   Optional[Array] $additional  = [],
   Optional[String] $reload_cmd = $getssl::params::reload_cmd,
   ) {
@@ -33,14 +34,15 @@ define getssl::resources::domain (
   $sans = empty($additional) ? { true => [], default => $additional }
 
   $params = { ''             => {
-      'CA'                   => $ca,
-      'SANS'                 => join($sans, ','),
-      'ACL'                  => "('${acl}')",
-      'USE_SINGLE_ACL'       => true,
-      'DOMAIN_CERT_LOCATION' => $ssl_cert,
-      'DOMAIN_KEY_LOCATION'  => $ssl_key,
-      'CA_CERT_LOCATION'     => $ca_cert,
-      'RELOAD_CMD'           => "\"${reload_cmd}\"",
+      'CA'                    => $ca,
+      'SANS'                  => join($sans, ','),
+      'ACL'                   => "('${acl}')",
+      'USE_SINGLE_ACL'        => true,
+      'DOMAIN_CERT_LOCATION'  => $ssl_cert,
+      'DOMAIN_KEY_LOCATION'   => $ssl_key,
+      'DOMAIN_CHAIN_LOCATION' => $ssl_chain,
+      'CA_CERT_LOCATION'      => $ca_cert,
+      'RELOAD_CMD'            => "\"${reload_cmd}\"",
     }
   }
 
