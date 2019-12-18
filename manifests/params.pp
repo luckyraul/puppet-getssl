@@ -6,9 +6,9 @@ class getssl::params {
   $manage_cron = true
   $exec_path = '/usr/local/bin/getssl'
   $config_path = '/etc/getssl'
-  $script_source = 'https://raw.githubusercontent.com/srvrco/getssl/master/getssl'
+  $script_source = 'https://raw.githubusercontent.com/srvrco/getssl/v2.14/getssl'
 
-  $ca = 'https://acme-v01.api.letsencrypt.org'
+  $ca = 'https://acme-v02.api.letsencrypt.org'
   $reload_cmd = 'systemctl reload nginx'
 
   case $::operatingsystem {
