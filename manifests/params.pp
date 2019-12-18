@@ -14,7 +14,7 @@ class getssl::params {
   case $::operatingsystem {
       'Debian': {
           case $::lsbdistcodename {
-              'jessie', 'stretch': {
+              'jessie', 'stretch', 'buster': {
 
               }
               default: {
