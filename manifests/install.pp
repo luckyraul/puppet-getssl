@@ -9,7 +9,7 @@ class getssl::install(
   $cron    = $getssl::manage_cron,
   ) {
 
-  ensure_packages(['curl'], {'ensure' => 'present'})
+  ensure_packages(['curl', 'gawk'], {'ensure' => 'present'})
 
   Package['curl'] -> archive { $dest:
       ensure => 'present',
