@@ -10,6 +10,7 @@ class getssl::params {
 
   $ca = 'https://acme-v02.api.letsencrypt.org'
   $reload_cmd = 'systemctl reload nginx'
+  $chain = 'ISRG Root X1'
 
   case $::operatingsystem {
       'Debian': {

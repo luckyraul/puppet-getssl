@@ -10,6 +10,7 @@ define getssl::resources::domain (
   String $ca_cert              = "/etc/ssl/${name}.ca.crt",
   Optional[Array] $additional  = [],
   Optional[String] $reload_cmd = $getssl::params::reload_cmd,
+  Optional[String] $chain      = $getssl::params::chain,
   ) {
 
   file { "${confdir}/${domain}":
@@ -38,6 +39,7 @@ define getssl::resources::domain (
       'SANS'                  => join($sans, ','),
       'ACL'                   => "('${acl}')",
       'USE_SINGLE_ACL'        => true,
+      'PREFERRED_CHAIN'       => "\"${chain}\"",
       'DOMAIN_CERT_LOCATION'  => $ssl_cert,
       'DOMAIN_KEY_LOCATION'   => $ssl_key,
       'DOMAIN_CHAIN_LOCATION' => $ssl_chain,
