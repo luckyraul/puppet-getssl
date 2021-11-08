@@ -48,5 +48,5 @@ define getssl::resources::domain (
     }
   }
 
-  create_ini_settings($params, $defaults)
+  inifile::create_ini_settings($params, $defaults)
 }
