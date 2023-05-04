@@ -2,28 +2,27 @@
 #
 #   This class sets all the sufficient default settings
 #
-class getssl::install(
+class getssl::install (
   $source  = $getssl::script_source,
   $confdir = $getssl::config_path,
   $dest    = $getssl::exec_path,
   $cron    = $getssl::manage_cron,
-  ) {
-
-  ensure_packages(['curl', 'gawk'], {'ensure' => 'present'})
+) {
+  ensure_packages(['curl', 'gawk'], { 'ensure' => 'present' })
 
   Package['curl'] -> archive { $dest:
-      ensure => 'present',
-      source => $source,
+    ensure => 'present',
+    source => $source,
   } -> file { $dest:
-      mode   => '0755',
+    mode   => '0755',
   }
 
   # Create Base Directories
   file { $confdir:
-      ensure => directory,
-      owner  => root,
-      group  => root,
-      mode   => '0644',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0644',
   }
 
   $cron_ensure = $cron ? { true => 'present', default => 'absent' }
@@ -35,5 +34,4 @@ class getssl::install(
     hour    => '23',
     minute  => '5',
   }
-
 }

@@ -13,7 +13,6 @@ define getssl::resources::domain (
   Optional[String] $reload_cmd = $getssl::params::reload_cmd,
   Optional[String] $chain      = $getssl::params::chain,
 ) {
-
   if ($ensure != 'absent') {
     file { "${confdir}/${domain}":
       ensure => directory,
@@ -21,7 +20,7 @@ define getssl::resources::domain (
       group  => root,
       mode   => '0644',
     } -> file { "${confdir}/${domain}/getssl.cfg":
-      ensure  => 'present',
+      ensure  => 'file',
       replace => 'no',
       mode    => '0644',
       owner   => root,
@@ -47,17 +46,16 @@ define getssl::resources::domain (
         'DOMAIN_CHAIN_LOCATION' => $ssl_chain,
         'CA_CERT_LOCATION'      => $ca_cert,
         'RELOAD_CMD'            => "\"${reload_cmd}\"",
-      }
+      },
     }
 
     inifile::create_ini_settings($params, $defaults)
-
   } else {
-      file { "${confdir}/${domain}":
-        ensure  => $ensure,
-        recurse => true,
-        purge   => true,
-        force   => true,
-      }
+    file { "${confdir}/${domain}":
+      ensure  => $ensure,
+      recurse => true,
+      purge   => true,
+      force   => true,
+    }
   }
 }

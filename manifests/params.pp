@@ -12,19 +12,17 @@ class getssl::params {
   $reload_cmd = 'systemctl reload nginx'
   $chain = 'ISRG Root X1'
 
-  case $::operatingsystem {
-      'Debian': {
-          case $::lsbdistcodename {
-              'stretch', 'buster', 'bullseye': {
-
-              }
-              default: {
-                  fail("Unsupported release: ${::lsbdistcodename}")
-              }
-          }
+  case $facts['os']['name'] {
+    'Debian': {
+      case $facts['os']['distro']['codename'] {
+        'buster', 'bullseye', 'bookworm': {}
+        default: {
+          fail("Unsupported release: ${facts['os']['distro']['codename']}")
+        }
       }
-      default: {
-          fail("Unsupported os: ${::operatingsystem}")
-      }
+    }
+    default: {
+      fail("Unsupported os: ${facts['os']['name']}")
+    }
   }
 }
