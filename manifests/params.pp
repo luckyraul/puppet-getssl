@@ -6,7 +6,7 @@ class getssl::params {
   $manage_cron = true
   $exec_path = '/usr/local/bin/getssl'
   $config_path = '/etc/getssl'
-  $script_source = 'https://raw.githubusercontent.com/srvrco/getssl/v2.45/getssl'
+  $script_source = 'https://raw.githubusercontent.com/srvrco/getssl/v2.49/getssl'
 
   $ca = 'https://acme-v02.api.letsencrypt.org'
   $reload_cmd = 'systemctl reload nginx'
@@ -15,7 +15,15 @@ class getssl::params {
   case $facts['os']['name'] {
     'Debian': {
       case $facts['os']['distro']['codename'] {
-        'buster', 'bullseye', 'bookworm': {}
+        'buster', 'bullseye', 'bookworm', 'trixie': {}
+        default: {
+          fail("Unsupported release: ${facts['os']['distro']['codename']}")
+        }
+      }
+    }
+    'Ubuntu': {
+      case $facts['os']['distro']['codename'] {
+        'noble': {}
         default: {
           fail("Unsupported release: ${facts['os']['distro']['codename']}")
         }
